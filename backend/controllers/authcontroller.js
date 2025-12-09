@@ -82,31 +82,48 @@ exports.loginUser = asyncHandler(async (req, res) => {
 // @route GET /api/auth/me
 // @access Private
 exports.getMe = asyncHandler(async (req, res) => {
-    res.json(req.user);
+    try {
+        const user = await User.findById(req.user._id);
+        res.json({
+            _id: user._id,
+            name: user.name,
+            email: user.email,
+            businessName: user.businessName || '',
+            adress: user.adress || '',
+            phoneNumber: user.phoneNumber || '',
+        });
+    } catch (error) {
+        res.status(400);
+        throw new Error("Invalid user data");
+    }
 });
 
 //update user profile
 // @route PUT /api/auth/update-profile
 // @access Private
 exports.updateUserProfile = asyncHandler(async (req, res) => {
-    const { name, email } = req.body;
-    if (!name || !email) {
-        res.status(400);
-        throw new Error("Please add all fields");
-    }
-
-    const user = await User.findById(req.user._id);
-    if (user) {
-        user.name = name;
-        user.email = email;
+    try {
+        const user = await User.findById(req.user._id);
+        if (!user) {
+            res.status(404);
+            throw new Error("User not found");
+        }
+        user.name = req.body.name || user.name;
+        user.email = req.body.email || user.email;
+        user.businessName = req.body.businessName || user.businessName;
+        user.adress = req.body.adress || user.adress;
+        user.phoneNumber = req.body.phoneNumber || user.phoneNumber;
         await user.save();
         res.json({
             _id: user._id,
             name: user.name,
             email: user.email,
+            businessName: user.businessName || '',
+            adress: user.adress || '',
+            phoneNumber: user.phoneNumber || '',
         });
-    } else {
-        res.status(404);
-        throw new Error("User not found");
+    } catch (error) {
+        res.status(400);
+        throw new Error("Invalid user data");
     }
 });
