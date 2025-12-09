@@ -36,39 +36,33 @@ const InvoiceSchema = new mongoose.Schema({
     invoiceDate: {
         type: Date,
         default: Date.now,
-        },
+    },
     dueDate: {
         type: Date,
         required: true
     },
-    billfrom:{
+    billfrom: {
         businessName: String,
         address: String,
         phoneNumber: String,
     },
-    billto:{
+    billto: {
         clientName: String,
         address: String,
         phoneNumber: String,
         email: String,
     },
     items: [itemSchema],
-    subTotal: {
-        type: Number,
-        required: true
-    },
-    tax: {
-        type: Number,
-        default: 0
-    },
-    total: {
-        type: Number,
-        required: true
-    },
-    status: {
-        type: String,
-        enum: ["draft", "sent", "paid", "overdue"],
-        default: "draft"
-    },
-    
-});
+    notes: { type: String },
+
+    paymentTerms: { type: String, default: "Net 15" },
+
+    status: { type: String, default: "unpaid", enum: ["unpaid", "paid", "partial", "overdue"] },
+    subTotal: { type: Number },
+    taxTotal: { type: Number },
+    total: { type: Number },
+},
+{ timestamps: true }
+);
+
+module.exports = mongoose.model("Invoice", InvoiceSchema);

@@ -3,7 +3,12 @@ const express = require("express");
 const cors = require("cors");
 const path = require("path");
 const connectDB = require("./config/db");
+const authRoutes = require("./routes/authRoutes");
+
 const app = express();
+
+// Middleware
+app.use(express.json());
 
 // Middleware to handle cors
 app.use(
@@ -15,15 +20,11 @@ app.use(
         }
     ));
 
-    //connect to db 
+//connect to db 
 connectDB();
 
-    //Middleware
-    app.use(express.json());
-
-    //Routes
-
-    // Start the server
-    const PORT = process.env.PORT || 5000;
-    app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-    
+//Routes
+app.use("/api/auth", authRoutes);
+// Start the server
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

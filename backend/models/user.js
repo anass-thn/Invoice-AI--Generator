@@ -20,18 +20,19 @@ const userSchema = new mongoose.Schema({
         minlength: 6,
         select: false,
     },
-    
+
     businessName: {
-        type: String, default:'' },
-    adress: {type: String, default:''},
-    phoneNumber: {type: String, default:''},
+        type: String, default: ''
+    },
+    adress: { type: String, default: '' },
+    phoneNumber: { type: String, default: '' },
 },
-{timestamps: true}
+    { timestamps: true }
 );
 
 // Password hash middleware
 userSchema.pre("save", async function (next) {
-    if (this.isModified("password")) return next();
+    if (!this.isModified("password")) return next();
     const salt = await bcrypt.genSalt(10);
     this.password = await bcrypt.hash(this.password, salt);
     next();
@@ -45,4 +46,3 @@ userSchema.methods.comparePassword = async function (enteredPassword) {
 module.exports = mongoose.model("User", userSchema);
 
 
-    
