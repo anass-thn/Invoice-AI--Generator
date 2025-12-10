@@ -66,7 +66,7 @@ exports.getInvoices = asyncHandler(async (req, res) => {
 // @access Private
 exports.getInvoiceById = asyncHandler(async (req, res) => {
     try {
-        const invoice = await Invoice.findById(req.params.id);
+        const invoice = await Invoice.findById(req.params.id).populate("user", "name email");
         if (!invoice) {
             res.status(404);
             throw new Error("Invoice not found");
@@ -88,11 +88,30 @@ exports.updateInvoice = asyncHandler(async (req, res) => {
             res.status(404);
             throw new Error("Invoice not found");
         }
-        invoice.title = req.body.title || invoice.title;
-        invoice.amount = req.body.amount || invoice.amount;
+        invoice.invoiceNumber = req.body.invoiceNumber || invoice.invoiceNumber;
+        invoice.invoiceDate = req.body.invoiceDate || invoice.invoiceDate;
         invoice.dueDate = req.body.dueDate || invoice.dueDate;
+        invoice.billFrom = req.body.billFrom || invoice.billFrom;
+        invoice.billTo = req.body.billTo || invoice.billTo;
+        invoice.items = req.body.items || invoice.items;
+        invoice.notes = req.body.notes || invoice.notes;
+        invoice.paymentTerms = req.body.paymentTerms || invoice.paymentTerms;
         await invoice.save();
         res.status(200).json(invoice);
+        //recalculate total
+        let subtotal = 0;
+        let taxTotal = 0;
+        invoice.items.forEach((item) => {
+            subtotal += item.price * item.quantity;
+            taxTotal += item.price * item.quantity * item.tax / 100;
+        });
+        const total = subtotal + taxTotal;
+        invoice.subtotal = subtotal;
+        invoice.taxTotal = taxTotal;
+        invoice.total = total;
+        await invoice.save();
+        res.status(200).json(invoice);
+
     } catch (error) {
         res.status(400);
         throw new Error("Invalid invoice data");
@@ -104,13 +123,12 @@ exports.updateInvoice = asyncHandler(async (req, res) => {
 // @access Private
 exports.deleteInvoice = asyncHandler(async (req, res) => {
     try {
-        const invoice = await Invoice.findById(req.params.id);
-        if (!invoice) {
-            res.status(404);
-            throw new Error("Invoice not found");
-        }
-        await invoice.remove();
-        res.status(200).json({ message: "Invoice deleted" });
+        const invoice = await Invoice.findByIdAndDelete(req.params.id);
+       if (!invoice) {
+           res.status(404);
+           throw new Error("Invoice not found");
+       }
+       res.status(200).json({ message: "Invoice deleted" });
     } catch (error) {
         res.status(400);
         throw new Error("Invalid invoice data");
