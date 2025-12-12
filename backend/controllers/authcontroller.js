@@ -5,7 +5,7 @@ const User = require("../models/user");
 
 // Helper : Generate JWT
 const generateToken = (id) => {
-    return jwt.sign({ id }, process.env.JWT_SECRET, {
+    return jwt.sign({ _id: id }, process.env.JWT_SECRET, {
         expiresIn: "30d",
     });
 };
@@ -15,6 +15,9 @@ const generateToken = (id) => {
 // @access Public
 exports.registerUser = asyncHandler(async (req, res) => {
     const { name, email, password } = req.body;
+
+    console.log("Register attempt:", { name, email }); // Log input (don't log password)
+
     if (!name || !email || !password) {
         res.status(400);
         throw new Error("Please add all fields");
@@ -23,20 +26,19 @@ exports.registerUser = asyncHandler(async (req, res) => {
     // Check if user exists
     const userExists = await User.findOne({ email });
     if (userExists) {
+        console.log("User already exists:", email);
         res.status(400);
         throw new Error("User already exists");
     }
 
-    // Hash password
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
-
-    // Create user
+    // Create user (password hashing handled by model middleware)
+    console.log("Creating user...");
     const user = await User.create({
         name,
         email,
-        password: hashedPassword,
+        password,
     });
+    console.log("User created:", user._id);
 
     if (user) {
         res.status(201).json({
@@ -61,8 +63,10 @@ exports.loginUser = asyncHandler(async (req, res) => {
         throw new Error("Please add all fields");
     }
 
-    const user = await User.findOne({ email });
-    if (user && (await bcrypt.compare(password, user.password))) {
+    // Check if user exists (include password for comparison)
+    const user = await User.findOne({ email }).select("+password");
+
+    if (user && (await user.comparePassword(password))) {
         res.json({
             _id: user._id,
             name: user.name,

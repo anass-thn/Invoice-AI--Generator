@@ -26,9 +26,14 @@ app.use(
 connectDB();
 
 //Routes
+const { errorHandler } = require("./middlewares/errorMiddleware");
+
 app.use("/api/auth", authRoutes);
 app.use("/api/invoices", invoiceRoutes);
 app.use("/api/ai", aiRoutes);
+
+app.use(errorHandler);
+
 // Start the server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

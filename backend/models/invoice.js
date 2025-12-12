@@ -10,7 +10,7 @@ const itemSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    unityPrice: {
+    unitPrice: {
         type: Number,
         required: true
     },
@@ -62,7 +62,7 @@ const InvoiceSchema = new mongoose.Schema({
     taxTotal: { type: Number },
     total: { type: Number },
 },
-{ timestamps: true }
+    { timestamps: true }
 );
 
 module.exports = mongoose.model("Invoice", InvoiceSchema);
