@@ -10,6 +10,7 @@ import InvoicesList from './pages/InvoicesList';
 import NewInvoice from './pages/NewInvoice';
 import InvoiceDetail from './pages/InvoiceDetail';
 import Profile from './pages/Profile';
+import DashboardLayout from './components/layout/DashboardLayout';
 
 const App = () => {
   return (
@@ -23,11 +24,13 @@ const App = () => {
 
           {/* Protected Routes */}
           <Route element={<ProtectedRoute />}>
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/invoices" element={<InvoicesList />} />
-            <Route path="/invoices/new" element={<NewInvoice />} />
-            <Route path="/invoices/:id" element={<InvoiceDetail />} />
-            <Route path="/profile" element={<Profile />} />
+            <Route element={<DashboardLayout />}>
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/invoices" element={<InvoicesList />} />
+              <Route path="/invoices/new" element={<NewInvoice />} />
+              <Route path="/invoices/:id" element={<InvoiceDetail />} />
+              <Route path="/profile" element={<Profile />} />
+            </Route>
           </Route>
         </Routes>
       </Router>

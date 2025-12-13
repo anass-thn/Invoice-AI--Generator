@@ -42,9 +42,11 @@ exports.registerUser = asyncHandler(async (req, res) => {
 
     if (user) {
         res.status(201).json({
-            _id: user._id,
-            name: user.name,
-            email: user.email,
+            user: {
+                _id: user._id,
+                name: user.name,
+                email: user.email,
+            },
             token: generateToken(user._id),
         });
     } else {
@@ -68,13 +70,15 @@ exports.loginUser = asyncHandler(async (req, res) => {
 
     if (user && (await user.comparePassword(password))) {
         res.json({
-            _id: user._id,
-            name: user.name,
-            email: user.email,
+            user: {
+                _id: user._id,
+                name: user.name,
+                email: user.email,
+                businessName: user.businessName || '',
+                adress: user.adress || '',
+                phoneNumber: user.phoneNumber || '',
+            },
             token: generateToken(user._id),
-            businessName: user.businessName || '',
-            adress: user.adress || '',
-            phoneNumber: user.phoneNumber || '',
         });
     } else {
         res.status(400);
@@ -89,12 +93,14 @@ exports.getMe = asyncHandler(async (req, res) => {
     try {
         const user = await User.findById(req.user._id);
         res.json({
-            _id: user._id,
-            name: user.name,
-            email: user.email,
-            businessName: user.businessName || '',
-            adress: user.adress || '',
-            phoneNumber: user.phoneNumber || '',
+            user: {
+                _id: user._id,
+                name: user.name,
+                email: user.email,
+                businessName: user.businessName || '',
+                adress: user.adress || '',
+                phoneNumber: user.phoneNumber || '',
+            }
         });
     } catch (error) {
         res.status(400);
@@ -119,12 +125,14 @@ exports.updateUserProfile = asyncHandler(async (req, res) => {
         user.phoneNumber = req.body.phoneNumber || user.phoneNumber;
         await user.save();
         res.json({
-            _id: user._id,
-            name: user.name,
-            email: user.email,
-            businessName: user.businessName || '',
-            adress: user.adress || '',
-            phoneNumber: user.phoneNumber || '',
+            user: {
+                _id: user._id,
+                name: user.name,
+                email: user.email,
+                businessName: user.businessName || '',
+                adress: user.adress || '',
+                phoneNumber: user.phoneNumber || '',
+            }
         });
     } catch (error) {
         res.status(400);
