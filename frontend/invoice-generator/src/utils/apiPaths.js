@@ -8,11 +8,11 @@ export const API_PATHS = {
         UPDATE_PROFILE: "/api/auth/me"
     },
     INVOICE: {
-        CREATE: "/api/invoice/",
+        CREATE: "/api/invoices",
         GET_ALL_INVOICE: "/api/invoices",
-        GET_INVOICE_BY_ID: (id) => `/api/invoice/${id}`,
-        UPDATE_INVOICE: (id) => `/api/invoice/${id}`,
-        DELETE_INVOICE: (id) => `/api/invoice/${id}`
+        GET_INVOICE_BY_ID: (id) => `/api/invoices/${id}`,
+        UPDATE_INVOICE: (id) => `/api/invoices/${id}`,
+        DELETE_INVOICE: (id) => `/api/invoices/${id}`
     },
     AI: {
         PARSE_INVOICE_TEXT: "/api/ai/parse-text",

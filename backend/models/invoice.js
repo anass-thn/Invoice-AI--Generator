@@ -10,11 +10,11 @@ const itemSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    unitPrice: {
+    price: {
         type: Number,
         required: true
     },
-    textpercent: {
+    tax: {
         type: Number,
         default: 0
     },
@@ -41,12 +41,13 @@ const InvoiceSchema = new mongoose.Schema({
         type: Date,
         required: true
     },
-    billfrom: {
+    billFrom: {
         businessName: String,
+        email: String,
         address: String,
         phoneNumber: String,
     },
-    billto: {
+    billTo: {
         clientName: String,
         address: String,
         phoneNumber: String,
@@ -58,7 +59,7 @@ const InvoiceSchema = new mongoose.Schema({
     paymentTerms: { type: String, default: "Net 15" },
 
     status: { type: String, default: "unpaid", enum: ["unpaid", "paid", "partial", "overdue"] },
-    subTotal: { type: Number },
+    subtotal: { type: Number },
     taxTotal: { type: Number },
     total: { type: Number },
 },

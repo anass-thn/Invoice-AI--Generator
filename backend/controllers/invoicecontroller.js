@@ -43,8 +43,9 @@ exports.createInvoice = asyncHandler(async (req, res) => {
         await invoice.save();
         res.status(201).json(invoice);
     } catch (error) {
+        console.error("Error creating invoice:", error);
         res.status(400);
-        throw new Error("Invalid invoice data");
+        throw new Error(error.message || "Invalid invoice data");
     }
 });
 
@@ -124,11 +125,11 @@ exports.updateInvoice = asyncHandler(async (req, res) => {
 exports.deleteInvoice = asyncHandler(async (req, res) => {
     try {
         const invoice = await Invoice.findByIdAndDelete(req.params.id);
-       if (!invoice) {
-           res.status(404);
-           throw new Error("Invoice not found");
-       }
-       res.status(200).json({ message: "Invoice deleted" });
+        if (!invoice) {
+            res.status(404);
+            throw new Error("Invoice not found");
+        }
+        res.status(200).json({ message: "Invoice deleted" });
     } catch (error) {
         res.status(400);
         throw new Error("Invalid invoice data");
