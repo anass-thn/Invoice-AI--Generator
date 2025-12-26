@@ -10,10 +10,16 @@ const parseInvoiceFromText = async (req, res) => {
     try {
         const systemPrompt = `You are an expert invoice data extractor AI. Analyze the following text and extract the relevant information to create an invoice. The output should be in JSON format with the following structure:
         {
-            "invoiceNumber": "string",
-            "invoiceDate": "YYYY-MM-DD",
-            "dueDate": "YYYY-MM-DD",
-            "billto": {
+            "invoiceNumber": "string (generate one if not found, format: INV-YYYYMMDD-XXX)",
+            "invoiceDate": "YYYY-MM-DD (use today if not specified)",
+            "dueDate": "YYYY-MM-DD (use 30 days from invoice date if not specified)",
+            "billFrom": {
+                "businessName": "string",
+                "email": "string",
+                "phoneNumber": "string",
+                "address": "string"
+            },
+            "billTo": {
                 "clientName": "string",
                 "email": "string",
                 "phoneNumber": "string",
@@ -23,15 +29,24 @@ const parseInvoiceFromText = async (req, res) => {
                 {
                     "name": "string",
                     "quantity": number,
-                    "unitPrice": number,
-                    "total": number
+                    "price": number,
+                    "tax": number (percentage, default 0),
+                    "total": number (quantity * price)
                 }
             ],
-            "subTotal": number,
+            "subtotal": number,
             "taxTotal": number,
             "total": number,
-            "notes": "string (optional)"
+            "notes": "string (optional)",
+            "paymentTerms": "string (default: Net 30)"
         }
+        
+        Important:
+        - If billFrom information is not in the text, leave those fields empty strings
+        - Generate a unique invoice number if not provided
+        - Calculate all totals accurately
+        - Use today's date if invoice date is not specified
+        - Set due date to 30 days from invoice date if not specified
         
         Here is the text to parse:
         ---
@@ -52,32 +67,15 @@ const parseInvoiceFromText = async (req, res) => {
         const cleanedJson = responseText.replace(/```json/g, "").replace(/```/g, '').trim();
         const parsedData = JSON.parse(cleanedJson);
 
-        // Create invoice with proper schema structure
-        const invoice = new Invoice({
-            user: req.user._id,
-            invoiceNumber: parsedData.invoiceNumber,
-            invoiceDate: parsedData.invoiceDate || new Date(),
-            dueDate: parsedData.dueDate,
-            billto: parsedData.billto,
-            items: parsedData.items,
-            subTotal: parsedData.subTotal,
-            taxTotal: parsedData.taxTotal,
-            total: parsedData.total,
-            notes: parsedData.notes || "",
-            status: "unpaid"
-        });
-
-        await invoice.save();
-
+        // Return parsed data without saving
         return res.status(200).json({
             success: true,
-            invoice,
             parsedData
         });
     } catch (error) {
         console.error("Error parsing invoice:", error);
         return res.status(500).json({
-            message: "Internal server error",
+            message: "Failed to parse invoice text. Please check the format and try again.",
             error: error.message
         });
     }

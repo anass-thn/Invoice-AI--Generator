@@ -119,6 +119,42 @@ exports.updateInvoice = asyncHandler(async (req, res) => {
     }
 });
 
+// Update invoice status
+// @route PATCH /api/invoices/:id/status
+// @access Private
+exports.updateInvoiceStatus = asyncHandler(async (req, res) => {
+    try {
+        const { status } = req.body;
+
+        // Validate status
+        const validStatuses = ['paid', 'unpaid', 'partial', 'overdue'];
+        if (!status || !validStatuses.includes(status)) {
+            res.status(400);
+            throw new Error(`Invalid status. Must be one of: ${validStatuses.join(', ')}`);
+        }
+
+        const invoice = await Invoice.findById(req.params.id);
+        if (!invoice) {
+            res.status(404);
+            throw new Error("Invoice not found");
+        }
+
+        // Check if user owns this invoice
+        if (invoice.user.toString() !== req.user._id.toString()) {
+            res.status(403);
+            throw new Error("Not authorized to update this invoice");
+        }
+
+        invoice.status = status;
+        await invoice.save();
+
+        res.status(200).json(invoice);
+    } catch (error) {
+        res.status(error.status || 400);
+        throw new Error(error.message || "Failed to update invoice status");
+    }
+});
+
 // Delete invoice
 // @route DELETE /api/invoices/:id
 // @access Private
