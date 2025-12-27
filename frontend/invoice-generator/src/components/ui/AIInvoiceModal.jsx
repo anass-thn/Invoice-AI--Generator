@@ -86,11 +86,23 @@ Notes: Thank you for your business!`;
         }
     };
 
-    const handleEditManually = () => {
-        // Store parsed data in sessionStorage and navigate to create page
-        sessionStorage.setItem('aiParsedInvoice', JSON.stringify(parsedData));
-        handleClose();
-        navigate('/invoices/new');
+    const handleEditManually = async () => {
+        setSaving(true);
+        setError(null);
+
+        try {
+            const response = await axiosInstance.post(API_PATHS.INVOICE.CREATE, parsedData);
+
+            if (response.data) {
+                handleClose();
+                navigate(`/invoices/${response.data._id}`);
+            }
+        } catch (err) {
+            console.error('Error saving invoice for editing:', err);
+            setError(err.response?.data?.message || 'Failed to save invoice for editing. Please try again.');
+        } finally {
+            setSaving(false);
+        }
     };
 
     const handleClose = () => {

@@ -55,7 +55,7 @@ const parseInvoiceFromText = async (req, res) => {
         
         Extract the data and provide ONLY the JSON object, no additional text.`;
 
-        const model = ai.getGenerativeModel({ model: "gemini-2.0-flash-exp" });
+        const model = ai.getGenerativeModel({ model: "gemini-2.5-flash" });
         const result = await model.generateContent(systemPrompt);
         let responseText = result.response.text();
 
@@ -73,9 +73,19 @@ const parseInvoiceFromText = async (req, res) => {
             parsedData
         });
     } catch (error) {
-        console.error("Error parsing invoice:", error);
+        console.error("Detailed AI Error:", error);
+
+        let userMessage = "Failed to parse invoice text.";
+        if (error.message.includes("404")) {
+            userMessage = "AI Model not found or API Key issue. Please ensure your Google AI Studio API Key is valid and has access to 'gemini-1.5-flash'.";
+        } else if (error.message.includes("403")) {
+            userMessage = "API Key restricted or quota exceeded.";
+        } else {
+            userMessage = `AI Error: ${error.message}`;
+        }
+
         return res.status(500).json({
-            message: "Failed to parse invoice text. Please check the format and try again.",
+            message: userMessage,
             error: error.message
         });
     }
@@ -119,7 +129,7 @@ Format the response as JSON:
     "body": "email body here"
 }`;
 
-        const model = ai.getGenerativeModel({ model: "gemini-2.0-flash-exp" });
+        const model = ai.getGenerativeModel({ model: "gemini-2.5-flash" });
         const result = await model.generateContent(prompt);
         const responseText = result.response.text();
 
@@ -185,7 +195,7 @@ Return your response as a valid JSON object with a single key "insights" which i
 
 Example format: { "insights": ["Your revenue is looking strong this month!", "You have 5 overdue invoices. Consider sending reminders to get paid faster."] }`;
 
-        const model = ai.getGenerativeModel({ model: "gemini-2.0-flash-exp" });
+        const model = ai.getGenerativeModel({ model: "gemini-2.5-flash" });
         const result = await model.generateContent(prompt);
         const responseText = result.response.text();
 

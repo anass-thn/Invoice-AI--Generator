@@ -16,7 +16,7 @@ export const API_PATHS = {
         DELETE_INVOICE: (id) => `/api/invoices/${id}`
     },
     AI: {
-        PARSE_INVOICE_TEXT: "/api/ai/parse-text",
+        PARSE_INVOICE_TEXT: "/api/ai/parse-invoice",
         GENERATE_REMINDER: "/api/ai/generate-reminder",
         GET_DASHBOARD_SUMMARY: "/api/ai/dashboard-summary"
     }
