@@ -54,7 +54,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
 
             {/* Sidebar */}
             <aside
-                className={`fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-xl transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0 ${isOpen ? 'translate-x-0' : '-translate-x-full'
+                className={`fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-xl transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0 print:hidden ${isOpen ? 'translate-x-0' : '-translate-x-full'
                     }`}
             >
                 {/* Logo Area */}
@@ -72,8 +72,8 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
                                 to={item.path}
                                 onClick={() => window.innerWidth < 1024 && toggleSidebar()}
                                 className={`flex items-center px-4 py-3 rounded-lg transition-colors duration-200 ${isActive
-                                        ? 'bg-blue-50 text-blue-600 shadow-sm'
-                                        : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                                    ? 'bg-blue-50 text-blue-600 shadow-sm'
+                                    : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
                                     }`}
                             >
                                 <span className={`${isActive ? 'text-blue-600' : 'text-gray-400'}`}>

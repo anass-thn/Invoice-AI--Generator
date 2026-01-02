@@ -27,7 +27,7 @@ const TopNavigation = ({ toggleSidebar }) => {
     };
 
     return (
-        <header className="bg-white shadow-sm h-20 flex items-center justify-between px-6 lg:px-10">
+        <header className="bg-white shadow-sm h-20 flex items-center justify-between px-6 lg:px-10 print:hidden">
             {/* Mobile Menu Button */}
             <button
                 onClick={toggleSidebar}

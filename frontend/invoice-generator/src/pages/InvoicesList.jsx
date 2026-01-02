@@ -12,7 +12,8 @@ import {
     SparklesIcon,
     PlusIcon,
     MagnifyingGlassIcon,
-    FunnelIcon
+    FunnelIcon,
+    EyeIcon
 } from '@heroicons/react/24/outline';
 
 const InvoicesList = () => {
@@ -251,7 +252,11 @@ const InvoicesList = () => {
                         <tbody className="bg-white divide-y divide-gray-200">
                             {filteredInvoices.length > 0 ? (
                                 filteredInvoices.map((invoice) => (
-                                    <tr key={invoice._id} className="hover:bg-gray-50 transition-colors">
+                                    <tr
+                                        key={invoice._id}
+                                        className="hover:bg-blue-50 cursor-pointer transition-colors"
+                                        onClick={() => navigate(`/invoices/${invoice._id}`)}
+                                    >
                                         <td className="px-6 py-4 whitespace-nowrap">
                                             <div className="text-sm font-medium text-gray-900">
                                                 {invoice.invoiceNumber}
@@ -283,9 +288,24 @@ const InvoicesList = () => {
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                             <div className="flex items-center justify-end gap-2">
+                                                {/* View Button */}
+                                                <button
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        navigate(`/invoices/${invoice._id}`);
+                                                    }}
+                                                    className="p-2 text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-colors"
+                                                    title="View Details"
+                                                >
+                                                    <EyeIcon className="h-5 w-5" />
+                                                </button>
+
                                                 {/* Toggle Status Button */}
                                                 <button
-                                                    onClick={() => handleStatusToggle(invoice)}
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        handleStatusToggle(invoice);
+                                                    }}
                                                     disabled={statusUpdateLoading[invoice._id]}
                                                     className={`inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded ${invoice.status === 'paid'
                                                         ? 'text-yellow-700 bg-yellow-100 hover:bg-yellow-200'
@@ -305,7 +325,10 @@ const InvoicesList = () => {
 
                                                 {/* Edit Button */}
                                                 <button
-                                                    onClick={() => navigate(`/invoices/${invoice._id}`)}
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        navigate(`/invoices/${invoice._id}`);
+                                                    }}
                                                     className="p-2 text-blue-600 hover:text-blue-900 hover:bg-blue-50 rounded-md transition-colors"
                                                     title="Edit Invoice"
                                                 >
@@ -314,7 +337,10 @@ const InvoicesList = () => {
 
                                                 {/* Message Button */}
                                                 <button
-                                                    onClick={() => setMessageModal({ isOpen: true, invoice })}
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        setMessageModal({ isOpen: true, invoice });
+                                                    }}
                                                     className="p-2 text-indigo-600 hover:text-indigo-900 hover:bg-indigo-50 rounded-md transition-colors"
                                                     title="Send Message"
                                                 >
@@ -323,7 +349,10 @@ const InvoicesList = () => {
 
                                                 {/* Delete Button */}
                                                 <button
-                                                    onClick={() => setDeleteModal({ isOpen: true, invoice })}
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        setDeleteModal({ isOpen: true, invoice });
+                                                    }}
                                                     className="p-2 text-red-600 hover:text-red-900 hover:bg-red-50 rounded-md transition-colors"
                                                     title="Delete Invoice"
                                                 >

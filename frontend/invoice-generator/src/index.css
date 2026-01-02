@@ -1,2 +1,17 @@
 @import url('https://fonts.googleapis.com/css2?family=Playwrite+NO:wght@100..400&family=Roboto:ital,wght@0,100..900;1,100..900&family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap');
 @import "tailwindcss";
+
+@layer utilities {
+  @media print {
+    body {
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+    
+    /* Ensure the invoice fits on a single page if possible and remove regular page margins */
+    @page {
+      margin: 0.5cm;
+      size: auto; 
+    }
+  }
+}
