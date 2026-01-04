@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/authcontext';
 import axiosInstance from '../utils/axiosInstance';
 import { API_PATHS } from '../utils/apiPaths';
 
 const NewInvoice = () => {
     const navigate = useNavigate();
+    const { user } = useAuth();
     const [saving, setSaving] = useState(false);
 
     // Invoice Details
@@ -17,6 +19,16 @@ const NewInvoice = () => {
     const [email, setEmail] = useState('');
     const [address, setAddress] = useState('');
     const [phone, setPhone] = useState('');
+
+    // Pre-fill Bill From with User Profile
+    useEffect(() => {
+        if (user) {
+            setBusinessName(user.businessName || '');
+            setEmail(user.email || '');
+            setAddress(user.adress || '');
+            setPhone(user.phoneNumber || '');
+        }
+    }, [user]);
 
     // Bill To
     const [clientName, setClientName] = useState('');
