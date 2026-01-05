@@ -1,54 +1,72 @@
 import React from 'react';
+import { Sparkles, BarChart3, BellRing, Files } from 'lucide-react';
 
 const Features = () => {
+    const features = [
+        {
+            icon: <Sparkles className="w-6 h-6 text-white" />,
+            title: "AI Invoice Creation",
+            description: "Generate professional invoices instantly with AI. Just describe your work and let our smart system create perfectly formatted invoices.",
+            color: "bg-indigo-600",
+            delay: "0"
+        },
+        {
+            icon: <BarChart3 className="w-6 h-6 text-white" />,
+            title: "AI-Powered Dashboard",
+            description: "Get intelligent insights into your business. Track revenue, monitor payment trends, and receive AI-driven recommendations.",
+            color: "bg-violet-600",
+            delay: "100"
+        },
+        {
+            icon: <BellRing className="w-6 h-6 text-white" />,
+            title: "Smart Reminders",
+            description: "Never miss a payment again. Automated reminders for overdue invoices and upcoming payment deadlines keep your cash flow healthy.",
+            color: "bg-fuchsia-600",
+            delay: "200"
+        },
+        {
+            icon: <Files className="w-6 h-6 text-white" />,
+            title: "Easy Invoice Management",
+            description: "Organize, search, and filter all your invoices in one place. Export reports, track statuses, and manage clients effortlessly.",
+            color: "bg-pink-600",
+            delay: "300"
+        }
+    ];
+
     return (
-        <section id="features" className="py-20 bg-white">
-            <div className="container mx-auto px-4">
-                <h2 className="text-4xl font-bold text-center mb-16 text-gray-800">Powerful Features for Smart Invoicing</h2>
+        <section id="features" className="py-24 bg-slate-50 relative overflow-hidden">
+            {/* Background decoration */}
+            <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+                <div className="absolute -top-24 -right-24 w-96 h-96 bg-indigo-100 rounded-full blur-3xl opacity-50"></div>
+                <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-violet-100 rounded-full blur-3xl opacity-50"></div>
+            </div>
+
+            <div className="container mx-auto px-6 relative z-10">
+                <div className="text-center max-w-3xl mx-auto mb-16">
+                    <h2 className="text-base font-semibold text-indigo-600 tracking-wide uppercase mb-2">Features</h2>
+                    <h3 className="text-3xl md:text-5xl font-bold mb-4 text-gray-900">Everything you need to <span className="text-gradient">grow faster</span></h3>
+                    <p className="text-lg text-gray-600">Powerful tools designed to help you manage your finances with ease and precision.</p>
+                </div>
+
                 <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-                    {/* Feature 1: AI Invoice Creation */}
-                    <div className="p-8 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl hover:shadow-xl transition duration-300 border border-blue-100">
-                        <div className="w-14 h-14 bg-blue-600 rounded-full flex items-center justify-center mb-6 text-white">
-                            <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
-                            </svg>
-                        </div>
-                        <h3 className="text-xl font-bold mb-3 text-gray-800">AI Invoice Creation</h3>
-                        <p className="text-gray-600 text-sm">Generate professional invoices instantly with AI. Just describe your work and let our smart system create perfectly formatted invoices.</p>
-                    </div>
+                    {features.map((feature, index) => (
+                        <div
+                            key={index}
+                            className="group p-8 bg-white rounded-2xl hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 border border-gray-100 relative overflow-hidden"
+                            style={{ animationDelay: `${feature.delay}ms` }}
+                        >
+                            <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-gray-50 to-transparent rounded-bl-full -mr-10 -mt-10 transition-transform group-hover:scale-150 duration-500"></div>
 
-                    {/* Feature 2: AI-Powered Dashboard */}
-                    <div className="p-8 bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl hover:shadow-xl transition duration-300 border border-purple-100">
-                        <div className="w-14 h-14 bg-purple-600 rounded-full flex items-center justify-center mb-6 text-white">
-                            <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
-                            </svg>
-                        </div>
-                        <h3 className="text-xl font-bold mb-3 text-gray-800">AI-Powered Dashboard</h3>
-                        <p className="text-gray-600 text-sm">Get intelligent insights into your business. Track revenue, monitor payment trends, and receive AI-driven recommendations.</p>
-                    </div>
+                            <div className={`w-14 h-14 ${feature.color} rounded-xl flex items-center justify-center mb-6 shadow-lg shadow-indigo-500/20 group-hover:scale-110 transition-transform duration-300 relative z-10`}>
+                                {feature.icon}
+                            </div>
 
-                    {/* Feature 3: Smart Reminders */}
-                    <div className="p-8 bg-gradient-to-br from-green-50 to-teal-50 rounded-xl hover:shadow-xl transition duration-300 border border-green-100">
-                        <div className="w-14 h-14 bg-green-600 rounded-full flex items-center justify-center mb-6 text-white">
-                            <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
-                            </svg>
+                            <h4 className="text-xl font-bold mb-3 text-gray-900 relative z-10">{feature.title}</h4>
+                            <p className="text-gray-600 leading-relaxed relative z-10">
+                                {feature.description}
+                            </p>
                         </div>
-                        <h3 className="text-xl font-bold mb-3 text-gray-800">Smart Reminders</h3>
-                        <p className="text-gray-600 text-sm">Never miss a payment again. Automated reminders for overdue invoices and upcoming payment deadlines keep your cash flow healthy.</p>
-                    </div>
-
-                    {/* Feature 4: Easy Invoice Management */}
-                    <div className="p-8 bg-gradient-to-br from-orange-50 to-amber-50 rounded-xl hover:shadow-xl transition duration-300 border border-orange-100">
-                        <div className="w-14 h-14 bg-orange-600 rounded-full flex items-center justify-center mb-6 text-white">
-                            <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                            </svg>
-                        </div>
-                        <h3 className="text-xl font-bold mb-3 text-gray-800">Easy Invoice Management</h3>
-                        <p className="text-gray-600 text-sm">Organize, search, and filter all your invoices in one place. Export reports, track statuses, and manage clients effortlessly.</p>
-                    </div>
+                    ))}
                 </div>
             </div>
         </section>
